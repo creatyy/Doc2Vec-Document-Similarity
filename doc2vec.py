@@ -7,17 +7,17 @@ from gensim.models.doc2vec import Doc2Vec, LabeledSentence
 # for line in stop_text:
 #     stop_word.append(line.strip())
 TaggededDocument = gensim.models.doc2vec.TaggedDocument
+import json
 
 def get_corpus():
-
-    with open("corpus_seg.txt", 'r') as doc:
+    with open("train_test.txt", 'r',encoding='UTF-8') as doc:
         docs = doc.readlines()
     train_docs = []
     for i, text in enumerate(docs):
         word_list = text.split(' ')
         length = len(word_list)
         word_list[length - 1] = word_list[length - 1].strip()
-        document = TaggededDocument(word_list, tags=[i])
+        document = TaggededDocument(word_list, tags=[i])#有list变为TaggedDocument格式
         train_docs.append(document)
     return train_docs
 
@@ -42,7 +42,7 @@ def test():
 
 if __name__ == '__main__':
     x_train = get_corpus()
-    # model_dm = train(x_train)
+    model_dm = train(x_train)
     sims = test()
     for count, sim in sims:
         sentence = x_train[count]
@@ -50,3 +50,5 @@ if __name__ == '__main__':
         for word in sentence[0]:
             words = words + word + ' '
         print(words, sim, len(sentence[0]))
+        # with open("C:/Users/ASUS/Desktop/相近文章.txt", 'w') as f:
+        #     f.write(words, sim, len(sentence[0]))
